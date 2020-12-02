@@ -10,7 +10,7 @@ import (
 const year = 2020
 
 func main() {
-	f, err := os.Open("../input/1.txt")
+	f, err := os.Open("../../input/1.txt")
 	if err != nil {
 		fmt.Println(err)
 	}
