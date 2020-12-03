@@ -23,27 +23,28 @@ func main() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(solveSlope(grid, 3, 1))
+	target := "#"
+	fmt.Println(calculateGridHits(grid, target, 3, 1))
 	fmt.Println(
-		solveSlope(grid, 1, 1) *
-			solveSlope(grid, 3, 1) *
-			solveSlope(grid, 5, 1) *
-			solveSlope(grid, 7, 1) *
-			solveSlope(grid, 1, 2),
+		calculateGridHits(grid, target, 1, 1) *
+			calculateGridHits(grid, target, 3, 1) *
+			calculateGridHits(grid, target, 5, 1) *
+			calculateGridHits(grid, target, 7, 1) *
+			calculateGridHits(grid, target, 1, 2),
 	)
 }
 
-func solveSlope(slope []string, right int, down int) int {
-	x, y, trees := 0, 0, 0
-	for y < len(slope)-1 {
-		x += right
-		y += down
-		line := slope[y]
+func calculateGridHits(grid []string, target string, startingX int, startingY int) int {
+	x, y, hits := 0, 0, 0
+	for y < len(grid)-1 {
+		x += startingX
+		y += startingY
+		line := grid[y]
 		currentX := x % len(line)
 
-		if string(line[currentX]) == "#" {
-			trees++
+		if string(line[currentX]) == target {
+			hits++
 		}
 	}
-	return trees
+	return hits
 }
