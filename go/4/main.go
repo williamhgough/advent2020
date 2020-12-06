@@ -74,26 +74,21 @@ func parsePassportData(lines []string) *Passport {
 }
 
 func (p *Passport) isValid() bool {
-	if p.pid == "" {
+	// PID
+	pid, err := strconv.Atoi(p.pid)
+	if err != nil {
 		return false
-	} else {
-		xInt, err := strconv.Atoi(p.pid)
-		if err != nil {
-			return false
-		}
-		if len(p.pid) != 9 || xInt < 0 {
-			return false
-		}
+	}
+	if p.pid == "" || len(p.pid) != 9 || pid < 0 {
+		return false
 	}
 
-	if p.hcl == "" {
+	// HCL
+	if p.hcl == "" || len(p.hcl) != 7 || regexp.MustCompile(`(?m)#([0-9a-z]){6}`).FindString(p.hcl) == "" {
 		return false
-	} else {
-		if len(p.hcl) != 7 || regexp.MustCompile(`(?m)#([0-9a-z]){6}`).FindString(p.hcl) == "" {
-			return false
-		}
 	}
 
+	// HGT
 	if p.hgt == "" || len(p.hgt) > 5 {
 		return false
 	} else {
@@ -121,56 +116,41 @@ func (p *Passport) isValid() bool {
 		default:
 			return false
 		}
-
 	}
 
-	if p.ecl == "" {
+	// ECL
+	switch p.ecl {
+	case "amb", "blu", "brn", "gry", "grn", "hzl", "oth":
+	default:
 		return false
-	} else {
-		switch p.ecl {
-		case "amb", "blu", "brn", "gry", "grn", "hzl", "oth":
-		default:
-			return false
-		}
 	}
 
-	if p.eyr == "" {
+	// EYR
+	eyr, err := strconv.Atoi(p.eyr)
+	if err != nil {
 		return false
-	} else {
-		xInt, err := strconv.Atoi(p.eyr)
-		if err != nil {
-			return false
-		}
-		if len(p.eyr) != 4 || xInt < 2020 || xInt > 2030 {
-			return false
-		}
 	}
-
-	if p.byr == "" {
+	if p.eyr == "" || len(p.eyr) != 4 || eyr < 2020 || eyr > 2030 {
 		return false
-	} else {
-		xInt, err := strconv.Atoi(p.byr)
-		if err != nil {
-			return false
-		}
-
-		if len(p.byr) != 4 || xInt < 1920 || xInt > 2002 {
-			return false
-		}
 	}
 
-	if p.iyr == "" {
+	// BYR
+	byr, err := strconv.Atoi(p.byr)
+	if err != nil {
 		return false
-	} else {
-		xInt, err := strconv.Atoi(p.iyr)
-		if err != nil {
-			return false
-		}
-		if len(p.iyr) != 4 || xInt < 2010 || xInt > 2020 {
-			return false
-		}
 	}
-	fmt.Printf("%+v\n", p)
+	if p.byr == "" || len(p.byr) != 4 || byr < 1920 || byr > 2002 {
+		return false
+	}
+
+	// IYR
+	iyr, err := strconv.Atoi(p.iyr)
+	if err != nil {
+		return false
+	}
+	if p.iyr == "" || len(p.iyr) != 4 || iyr < 2010 || iyr > 2020 {
+		return false
+	}
 
 	return true
 }
