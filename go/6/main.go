@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"regexp"
 	"strings"
 )
 
@@ -14,9 +13,9 @@ func main() {
 		log.Fatalf(err.Error())
 	}
 
-	groupAnswers := []map[string]int{}
+	var groupAnswers []map[string]int
 	groupSize := map[int]int{}
-	groups := splitByEmptyNewline(string(data))
+	groups := strings.Split(string(data), "\n\n")
 	for i, group := range groups {
 		groupMembers := strings.Split(group, "\n")
 		groupSize[i] = len(groupMembers)
@@ -36,23 +35,13 @@ func main() {
 	fmt.Println(count)
 }
 
-func splitByEmptyNewline(str string) []string {
-	strNormalized := regexp.
-		MustCompile("\r\n").
-		ReplaceAllString(str, "\n")
-
-	return regexp.
-		MustCompile(`\n\s*\n`).
-		Split(strNormalized, -1)
-}
-
 func parseCount(counts map[string]int, groupMembers []string) {
 	for _, member := range groupMembers {
 		for _, answer := range member {
-			if val, ok := counts[string(answer)]; !ok {
+			if _, ok := counts[string(answer)]; !ok {
 				counts[string(answer)] = 1
 			} else {
-				counts[string(answer)] = val + 1
+				counts[string(answer)] += 1
 			}
 		}
 	}

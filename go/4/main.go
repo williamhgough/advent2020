@@ -27,7 +27,7 @@ func main() {
 	}
 
 	valid := 0
-	lines := splitByEmptyNewline(string(data))
+	lines := strings.Split(string(data), "\n\n")
 	for _, line := range lines {
 		passport := parsePassportData(strings.Fields(line))
 		if ok := passport.isValid(); ok {
@@ -36,16 +36,6 @@ func main() {
 	}
 
 	fmt.Println(valid)
-}
-
-func splitByEmptyNewline(str string) []string {
-	strNormalized := regexp.
-		MustCompile("\r\n").
-		ReplaceAllString(str, "\n")
-
-	return regexp.
-		MustCompile(`\n\s*\n`).
-		Split(strNormalized, -1)
 }
 
 func parsePassportData(lines []string) *Passport {
