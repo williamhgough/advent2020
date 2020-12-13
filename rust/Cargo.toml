@@ -5,6 +5,7 @@ name = "rust"
 version = "0.1.0"
 [dependencies]
 fxhash = "*"
+geo = "*"
 itertools = "*"
 lazy_static = "1.4.0"
 regex = "1.4.2"
